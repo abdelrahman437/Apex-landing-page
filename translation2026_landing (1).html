@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Translation 2026 — Where Language Meets Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --burgundy:#9E1938;
+    --deep-burgundy:#641126;
+    --off-white:#F4F1EC;
+    --charcoal:#171717;
+    --sand:#C7B39A;
+    --max:1140px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--off-white);
+    color:var(--charcoal);
+    overflow-x:hidden;
+  }
+  img,svg{display:block;}
+  .wrap{ max-width:var(--max); margin:0 auto; padding:0 28px; }
+  .display{ font-family:'Bebas Neue',sans-serif; letter-spacing:.02em; }
+  a{ color:inherit; text-decoration:none; }
+
+  /* grain + progress */
+  .grain{
+    position:fixed; inset:0; z-index:999; pointer-events:none; opacity:.05; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .progress{ position:fixed; top:0; left:0; height:3px; background:var(--burgundy); width:0%; z-index:1000; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:15px 30px; background:var(--burgundy); color:var(--off-white);
+    font-weight:700; font-size:13px; letter-spacing:.06em; border-radius:999px;
+    border:none; cursor:pointer; transition:background .18s ease, box-shadow .18s ease;
+    will-change:transform;
+  }
+  .btn:hover{ background:var(--deep-burgundy); }
+  .btn.ghost{ background:transparent; border:1.5px solid var(--charcoal); color:var(--charcoal); }
+  .btn.ghost:hover{ background:var(--charcoal); color:var(--off-white); }
+  .eyebrow{ font-size:12px; font-weight:700; letter-spacing:.16em; color:var(--burgundy); margin-bottom:14px; }
+  section{ position:relative; }
+
+  /* ---------------- NAV ---------------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(244,241,236,.88); backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(23,23,23,.08);
+  }
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:var(--max); margin:0 auto; }
+  .nav-brand{ display:flex; align-items:center; gap:11px; }
+  .nav-brand img{ height:20px; width:auto; }
+  .nav-brand .divider{ width:1px; height:18px; background:rgba(23,23,23,.2); }
+  .logo{ font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:.08em; }
+  .logo span{ color:var(--burgundy); }
+  .navlinks{ display:flex; gap:30px; font-size:13px; font-weight:600; }
+  .navlinks a{ opacity:.75; transition:opacity .15s; position:relative; }
+  .navlinks a::after{ content:""; position:absolute; left:0; bottom:-4px; width:0; height:1.4px; background:var(--burgundy); transition:width .25s ease; }
+  .navlinks a:hover{ opacity:1; }
+  .navlinks a:hover::after{ width:100%; }
+  .navbtn{ display:flex; align-items:center; gap:16px; }
+  .burger{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; }
+  .burger span{ width:22px; height:2px; background:var(--charcoal); }
+
+  /* ---------------- HERO ---------------- */
+  .hero{
+    min-height:100vh; display:flex; align-items:center; padding:140px 0 60px;
+    background:
+      radial-gradient(ellipse at 85% 12%, rgba(158,25,56,.08), transparent 55%),
+      radial-gradient(ellipse at 8% 90%, rgba(158,25,56,.06), transparent 50%),
+      var(--off-white);
+    overflow:hidden;
+  }
+  .hero-band{
+    position:absolute; left:-10%; bottom:-25%; width:55%; aspect-ratio:1/1;
+    background:var(--burgundy); transform:rotate(28deg); opacity:.9; z-index:0; border-radius:60px;
+    animation:drift 24s ease-in-out infinite alternate;
+  }
+  @keyframes drift{ from{ transform:rotate(22deg) scale(1); } to{ transform:rotate(32deg) scale(1.04); } }
+  .hero-ring{ position:absolute; width:120px; height:120px; border:1.5px solid rgba(23,23,23,.15); border-radius:50%; top:18%; right:10%; animation:float 7s ease-in-out infinite; }
+  @keyframes float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-18px); } }
+  .hero-inner{ position:relative; z-index:2; max-width:var(--max); margin:0 auto; padding:0 28px; text-align:center; }
+  .hero .eyebrow{ justify-content:center; display:flex; opacity:0; animation:fadeUp .7s .1s ease forwards; }
+
+  .hero h1{ font-size:clamp(48px,9vw,110px); line-height:.95; color:var(--charcoal); }
+  .hero h1 .line{ display:block; overflow:hidden; }
+  .hero h1 .line span{ display:inline-block; transform:translateY(115%); animation:riseIn .9s cubic-bezier(.16,1,.3,1) forwards; }
+  .hero h1 .line:nth-child(1) span{ animation-delay:.15s; }
+  .hero h1 .line:nth-child(2) span{ animation-delay:.32s; }
+  .hero h1 .line:nth-child(3) span{ animation-delay:.49s; }
+  @keyframes riseIn{ to{ transform:translateY(0); } }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+  .hero h1 em{ font-style:normal; color:var(--burgundy); }
+
+  .lang-chip{
+    display:inline-flex; align-items:center; gap:9px; margin-top:24px; padding:9px 20px;
+    border:1px solid rgba(23,23,23,.25); border-radius:999px; background:rgba(255,255,255,.55);
+    font-size:13px; font-weight:700; letter-spacing:.02em;
+    opacity:0; animation:fadeUp .7s .75s ease forwards;
+  }
+  .pulse-dot{ width:7px; height:7px; border-radius:50%; background:var(--burgundy); animation:pulse 1.6s infinite; flex-shrink:0; }
+  @keyframes pulse{ 0%{ box-shadow:0 0 0 0 rgba(158,25,56,.55);} 70%{ box-shadow:0 0 0 9px rgba(158,25,56,0);} 100%{ box-shadow:0 0 0 0 rgba(158,25,56,0);} }
+  #langWord{ transition:opacity .3s ease; min-width:70px; display:inline-block; }
+
+  .hero .sub{ margin-top:8px; font-size:14px; color:#555; opacity:0; animation:fadeUp .7s .9s ease forwards; }
+  .hero-cta{ margin-top:34px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap; opacity:0; animation:fadeUp .7s 1.05s ease forwards; }
+  .hero-info{
+    margin-top:50px; display:inline-flex; align-items:stretch; justify-content:center;
+    background:rgba(255,255,255,.6); border:1px solid rgba(23,23,23,.14); border-radius:20px;
+    padding:6px; opacity:0; animation:fadeUp .7s 1.2s ease forwards; backdrop-filter:blur(6px);
+  }
+  .hero-info .stat{
+    display:flex; align-items:center; gap:12px; padding:14px 26px; position:relative;
+  }
+  .hero-info .stat:not(:last-child)::after{
+    content:""; position:absolute; right:0; top:14%; bottom:14%; width:1px; background:rgba(23,23,23,.14);
+  }
+  .hero-info .stat .ico{
+    width:34px; height:34px; border-radius:10px; background:var(--burgundy); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;
+  }
+  .hero-info .stat .txt{ text-align:left; }
+  .hero-info .stat .value{ font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:.03em; line-height:1.1; }
+  .hero-info .stat .label{ font-size:10px; font-weight:700; letter-spacing:.09em; opacity:.55; margin-top:3px; text-transform:uppercase; }
+
+  .scroll-cue{
+    position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
+    width:22px; height:34px; border:1.6px solid rgba(23,23,23,.35); border-radius:12px; z-index:2;
+  }
+  .scroll-cue::before{
+    content:""; position:absolute; top:6px; left:50%; width:3px; height:7px; margin-left:-1.5px;
+    background:var(--burgundy); border-radius:2px; animation:scrollDown 1.8s ease infinite;
+  }
+  @keyframes scrollDown{ 0%{ opacity:1; transform:translateY(0);} 70%{ opacity:0; transform:translateY(10px);} 100%{opacity:0;} }
+
+  /* ---------------- INTRO ---------------- */
+  .intro{ padding:120px 0; text-align:center; }
+  .intro h2{ font-size:clamp(30px,5vw,54px); max-width:780px; margin:0 auto; }
+  .intro p{ max-width:620px; margin:26px auto 0; font-size:15.5px; line-height:1.75; color:#3a3a3a; }
+  .intro .presenter{ margin-top:38px; font-size:12.5px; font-weight:700; letter-spacing:.08em; color:var(--burgundy); }
+
+  /* ---------------- TWO EVENTS ---------------- */
+  .two-events{ padding:100px 0; background:var(--charcoal); color:var(--off-white); }
+  .two-events .eyebrow{ color:var(--sand); }
+  .two-events > .wrap > h2{ font-size:clamp(30px,5vw,50px); text-align:center; margin-bottom:60px; }
+  .events-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .event-card{
+    background:#211f1f; border:1px solid rgba(244,241,236,.12); border-radius:22px; padding:38px 34px;
+    display:flex; flex-direction:column; transition:transform .3s ease, border-color .3s ease;
+  }
+  .event-card:hover{ transform:translateY(-6px); border-color:rgba(244,241,236,.3); }
+  .event-card .tagnum{ font-size:12px; font-weight:700; letter-spacing:.12em; color:var(--sand); }
+  .event-card h3{ font-family:'Bebas Neue',sans-serif; font-size:34px; margin-top:10px; letter-spacing:.04em; }
+  .event-card .presented{ margin-top:6px; font-size:12.5px; opacity:.6; }
+  .event-card p.desc{ margin-top:18px; font-size:14px; line-height:1.6; opacity:.8; }
+  .event-card ul{ margin-top:22px; list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .event-card ul li{ font-size:13.5px; font-weight:600; opacity:.9; padding-left:14px; position:relative; }
+  .event-card ul li::before{ content:"—"; position:absolute; left:0; color:var(--burgundy); }
+  .event-card .btn{ margin-top:28px; align-self:flex-start; }
+  .event-card.pending{ border-style:dashed; }
+  .event-card.pending h3{ opacity:.5; }
+  .two-events .btn.ghost{ border-color:rgba(244,241,236,.55); color:var(--off-white); }
+  .two-events .btn.ghost:hover{ background:var(--off-white); color:var(--charcoal); }
+
+  /* ---------------- SPEAKERS ---------------- */
+  .speakers{ padding:120px 0; background:var(--off-white); }
+  .speakers > .wrap > .head{ text-align:center; margin-bottom:64px; }
+  .speakers h2{ font-size:clamp(30px,5vw,50px); }
+  .speakers-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+  .spk-card{
+    position:relative; border-radius:22px; overflow:hidden; background:var(--charcoal);
+    display:flex; flex-direction:column; transition:box-shadow .35s ease, transform .35s ease;
+    box-shadow:0 10px 26px rgba(23,23,23,.08);
+  }
+  .spk-card:hover{ box-shadow:0 22px 46px rgba(23,23,23,.22); transform:translateY(-6px); }
+  .spk-card .photo{
+    width:100%; aspect-ratio:3/4; position:relative; overflow:hidden;
+    background:linear-gradient(160deg,#3a3634,#211f1f);
+  }
+  .spk-card .photo svg{
+    position:absolute; left:50%; top:56%; width:56%; transform:translate(-50%,-50%);
+    opacity:.35; transition:transform .5s ease;
+  }
+  .spk-card:hover .photo svg{ transform:translate(-50%,-50%) scale(1.06); }
+  .spk-card .photo::before{
+    content:""; position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, transparent 35%, rgba(23,23,23,.92) 100%);
+  }
+  .spk-card .num{
+    position:absolute; top:14px; left:16px; z-index:2; font-family:'Bebas Neue',sans-serif;
+    font-size:30px; color:rgba(244,241,236,.5); line-height:1;
+  }
+  .spk-card .meet-tag{
+    position:absolute; top:16px; right:14px; z-index:2; background:var(--burgundy); color:#fff;
+    font-size:9.5px; font-weight:800; letter-spacing:.09em; padding:5px 10px; border-radius:999px;
+  }
+  .spk-card .name-overlay{
+    position:absolute; left:16px; right:16px; bottom:16px; z-index:2; color:#fff;
+    font-family:'Bebas Neue',sans-serif; font-size:23px; line-height:1.05; letter-spacing:.02em;
+  }
+  .spk-card .body{ padding:18px 18px 22px; background:#fff; }
+  .spk-card .role{ font-size:11px; font-weight:800; letter-spacing:.03em; color:var(--burgundy); text-transform:uppercase; }
+  .spk-card .bio{ font-size:12.5px; line-height:1.55; color:#444; margin-top:8px; }
+
+  /* ---------------- AGENDA (horizontal scroller) ---------------- */
+  .agenda{ padding:120px 0; background:var(--off-white); }
+  .agenda .head{ text-align:center; margin-bottom:14px; }
+  .agenda h2{ font-size:clamp(30px,5vw,50px); }
+  .agenda .subhint{ text-align:center; font-size:12.5px; color:#777; margin-bottom:44px; }
+  .agenda-scroll-outer{
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent);
+  }
+  .agenda-scroll{
+    display:flex; gap:18px; overflow-x:auto; scroll-snap-type:x proximity;
+    padding:8px 4px 22px; scrollbar-width:none; cursor:grab;
+  }
+  .agenda-scroll::-webkit-scrollbar{ display:none; }
+  .agenda-scroll:active{ cursor:grabbing; }
+  .agenda-card{
+    scroll-snap-align:start; flex:0 0 250px; background:#fff; border:1.4px solid rgba(23,23,23,.14);
+    border-radius:20px; padding:26px 22px; position:relative; display:flex; flex-direction:column; gap:8px;
+    transition:border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  .agenda-card:hover{ transform:translateY(-5px); border-color:var(--burgundy); box-shadow:0 14px 28px rgba(23,23,23,.1); }
+  .agenda-card .time{ font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--burgundy); line-height:1; }
+  .agenda-card h4{ font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:.02em; line-height:1.15; }
+  .agenda-card .who{ font-size:12px; color:#555; font-weight:600; line-height:1.4; }
+  .agenda-card .tag{ position:absolute; top:18px; right:18px; font-size:9.5px; font-weight:800; letter-spacing:.09em; color:var(--sand); }
+  .agenda-card.highlight{ background:var(--charcoal); color:#fff; border-color:var(--charcoal); }
+  .agenda-card.highlight .time{ color:var(--sand); }
+  .agenda-card.highlight .who{ color:rgba(244,241,236,.7); }
+  .agenda-rail{ position:relative; height:4px; background:rgba(23,23,23,.12); border-radius:2px; max-width:760px; margin:4px auto 0; }
+  .agenda-rail-fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:var(--burgundy); border-radius:2px; }
+  .agenda-nav{ display:flex; justify-content:center; gap:14px; margin-top:24px; }
+  .agenda-arrow{
+    width:42px; height:42px; border-radius:50%; border:1.4px solid rgba(23,23,23,.25); background:#fff;
+    cursor:pointer; font-size:17px; display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .agenda-arrow:hover{ background:var(--burgundy); color:#fff; border-color:var(--burgundy); }
+
+  /* ---------------- CAN AI TRANSLATE — sticky scrollytelling ---------------- */
+  .bigq{ position:relative; height:280vh; background:var(--charcoal); color:var(--off-white); }
+  .bigq-sticky{ position:sticky; top:0; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; overflow:hidden; }
+  .bigq h2{ font-size:clamp(38px,7vw,80px); }
+  .checklist{ max-width:520px; margin:52px auto 0; display:flex; flex-direction:column; gap:18px; width:100%; padding:0 28px; }
+  .check-row{
+    display:flex; align-items:center; justify-content:space-between; padding-bottom:16px;
+    border-bottom:1px solid rgba(244,241,236,.15); font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.03em;
+    opacity:.14; transform:translateY(8px); transition:opacity .45s ease, transform .45s ease;
+  }
+  .check-row.active{ opacity:1; transform:translateY(0); }
+  .check-row .mark{ font-family:'Inter',sans-serif; font-size:20px; font-weight:800; }
+  .check-row .mark.yes{ color:#7ac47f; }
+  .check-row .mark.q{ color:var(--sand); }
+  .bigq .final{ margin-top:46px; font-size:clamp(20px,3vw,30px); font-weight:700; color:var(--sand); opacity:0; transform:translateY(8px); transition:opacity .5s ease, transform .5s ease; }
+  .bigq .final.active{ opacity:1; transform:translateY(0); }
+
+  /* ---------------- INTERACTIVE ---------------- */
+  .interactive{ padding:120px 0; background:var(--off-white); }
+  .interactive .head{ text-align:center; margin-bottom:16px; }
+  .interactive h2{ font-size:clamp(30px,5vw,50px); }
+  .interactive .subhint{ text-align:center; font-size:14px; color:#666; max-width:520px; margin:0 auto 50px; line-height:1.6; }
+  .demo{ max-width:900px; margin:0 auto; border:1.4px solid rgba(23,23,23,.15); border-radius:26px; padding:34px; background:#fff; box-shadow:0 20px 50px rgba(23,23,23,.06); }
+  .demo-input-row{ display:flex; gap:12px; margin-bottom:30px; flex-wrap:wrap; }
+  .demo-input-row input{ flex:1; min-width:220px; padding:16px 18px; font-size:15px; border-radius:12px; border:1.4px solid rgba(23,23,23,.2); font-family:'Inter',sans-serif; }
+  .demo-input-row .btn{ flex-shrink:0; }
+  .demo .cols{ display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch; gap:14px; }
+  .demo .arrow{ display:flex; align-items:center; justify-content:center; color:rgba(23,23,23,.25); font-size:20px; }
+  .demo .col{ border-radius:16px; padding:20px; min-height:130px; border:1.4px solid rgba(23,23,23,.1); }
+  .demo .col.literal{ background:#F4F1EC; }
+  .demo .col.ai{ background:#efe6e2; border-color:rgba(158,25,56,.18); }
+  .demo .col.human{ background:#f7f1e9; border-color:rgba(199,179,154,.5); }
+  .demo .col .lbl{ display:flex; align-items:center; gap:7px; font-size:11px; font-weight:800; letter-spacing:.07em; color:var(--burgundy); margin-bottom:10px; text-transform:uppercase; }
+  .demo .col p{ font-size:13.5px; line-height:1.55; color:#333; }
+  .demo .question{ text-align:center; margin-top:26px; font-weight:700; font-size:14.5px; color:var(--deep-burgundy); }
+  @media (max-width:760px){
+    .demo .cols{ grid-template-columns:1fr; }
+    .demo .arrow{ transform:rotate(90deg); padding:2px 0; }
+  }
+
+  /* ---------------- WHY ATTEND ---------------- */
+  .why{ padding:120px 0; background:var(--off-white); }
+  .why .head{ text-align:center; margin-bottom:56px; }
+  .why h2{ font-size:clamp(30px,5vw,50px); }
+  .why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+  .why-card{ padding:30px 24px; border-radius:20px; border:1.4px solid rgba(23,23,23,.12); background:#fff; transition:transform .25s ease, border-color .25s ease; }
+  .why-card:hover{ transform:translateY(-5px); border-color:var(--burgundy); }
+  .why-card .icon{ font-size:26px; }
+  .why-card h4{ font-family:'Bebas Neue',sans-serif; font-size:20px; margin-top:16px; letter-spacing:.03em; }
+  .why-card p{ font-size:13px; line-height:1.55; color:#555; margin-top:8px; }
+
+  /* ---------------- PARTNERS (marquee) ---------------- */
+  .partners{ padding:90px 0; text-align:center; }
+  .partners .eyebrow{ justify-content:center; display:flex; }
+  .partner-marquee{ overflow:hidden; margin-top:30px; -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent); mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent); }
+  .partner-track{ display:flex; gap:60px; width:max-content; animation:marquee 16s linear infinite; }
+  @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  .partner-slot{ font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:.06em; padding:14px 26px; border:1.4px solid rgba(23,23,23,.2); border-radius:12px; white-space:nowrap; display:flex; align-items:center; }
+  .partner-slot.pending{ opacity:.45; border-style:dashed; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; }
+  .partner-slot.logo-slot{ background:#fff; }
+  .partner-slot.logo-slot img{ height:26px; width:auto; }
+
+  /* ---------------- CERTIFICATE ---------------- */
+  .cert{ padding:100px 0; background:var(--burgundy); color:var(--off-white); text-align:center; }
+  .cert h2{ font-size:clamp(30px,5vw,54px); }
+  .cert p{ max-width:520px; margin:20px auto 0; font-size:15px; line-height:1.7; opacity:.92; }
+  .cert .cpd{ margin-top:26px; font-size:12px; font-weight:800; letter-spacing:.1em; color:var(--sand); }
+
+  /* ---------------- FAQ ---------------- */
+  .faq{ padding:120px 0; max-width:760px; margin:0 auto; }
+  .faq .head{ text-align:center; margin-bottom:50px; }
+  .faq h2{ font-size:clamp(30px,5vw,50px); }
+  .faq-item{ border-bottom:1.4px solid rgba(23,23,23,.15); }
+  .faq-item summary{ padding:22px 4px; cursor:pointer; font-weight:700; font-size:15px; display:flex; justify-content:space-between; align-items:center; list-style:none; }
+  .faq-item summary::-webkit-details-marker{ display:none; }
+  .faq-item summary::after{ content:"+"; font-size:20px; color:var(--burgundy); font-weight:400; transition:transform .2s ease; }
+  .faq-item[open] summary::after{ content:"–"; }
+  .faq-item .a{ padding:0 4px 22px; font-size:14px; line-height:1.6; color:#444; }
+
+  /* ---------------- FINAL CTA ---------------- */
+  .final-cta{ padding:150px 0; text-align:center; background:var(--charcoal); color:var(--off-white); position:relative; overflow:hidden; }
+  .final-cta .band{ position:absolute; right:-15%; top:-20%; width:50%; aspect-ratio:1/1; background:var(--burgundy); transform:rotate(-24deg); opacity:.5; border-radius:70px; animation:drift 26s ease-in-out infinite alternate; }
+  .final-cta h2{ position:relative; z-index:1; font-size:clamp(38px,7vw,80px); line-height:1; }
+  .final-cta .sub{ position:relative; z-index:1; margin-top:20px; font-size:14px; opacity:.7; }
+  .final-cta .btn{ position:relative; z-index:1; margin-top:36px; }
+
+  /* ---------------- FOOTER ---------------- */
+  footer{ padding:34px 0; background:var(--off-white); border-top:1px solid rgba(23,23,23,.1); }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+  footer .foot-brand{ display:flex; align-items:center; gap:12px; }
+  footer .foot-brand img{ height:20px; width:auto; opacity:.9; }
+  footer .fl{ font-size:12px; opacity:.6; }
+  footer .fl.title{ font-weight:700; opacity:.85; }
+
+  @media (max-width:860px){
+    .navlinks{ display:none; }
+    .burger{ display:flex; }
+    .events-grid{ grid-template-columns:1fr; }
+    .speakers-grid{ grid-template-columns:1fr 1fr; }
+    .why-grid{ grid-template-columns:repeat(2,1fr); }
+    .demo .cols{ grid-template-columns:1fr; }
+    .hero-info{ flex-wrap:wrap; }
+    .bigq{ height:240vh; }
+  }
+  @media (max-width:540px){
+    .speakers-grid{ grid-template-columns:1fr; }
+    .hero-info{ display:flex; flex-direction:column; }
+    .hero-info .stat:not(:last-child)::after{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="progress" id="progressBar"></div>
+
+<header>
+  <nav class="nav">
+    <div class="nav-brand">
+      <img src="data:image/png;base64,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" alt="Apex">
+      <div class="divider"></div>
+      <div class="logo">TRANSLATION <span>2026</span></div>
+    </div>
+    <div class="navlinks">
+      <a href="#events">Events</a>
+      <a href="#speakers">Speakers</a>
+      <a href="#agenda">Agenda</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="navbtn">
+      <a href="#register" class="btn magnetic">Register</a>
+      <button class="burger" aria-label="menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-band"></div>
+  <div class="hero-ring"></div>
+  <div class="hero-inner">
+    <div class="eyebrow">APEX × SAINT JOSEPH UNIVERSITY</div>
+    <h1 class="display">
+      <span class="line"><span>INTERNATIONAL</span></span>
+      <span class="line"><span>TRANSLATION <em>DAY</em></span></span>
+      <span class="line"><span>2026</span></span>
+    </h1>
+    <div class="lang-chip"><span class="pulse-dot"></span><span id="langWord">Hello</span></div>
+    <div class="sub">Where language meets intelligence</div>
+    <div class="hero-cta">
+      <a href="#register" class="btn magnetic">Register Now</a>
+      <a href="#events" class="btn ghost">Explore the Program</a>
+    </div>
+    <div class="hero-info">
+      <div class="stat">
+        <div class="ico">📅</div>
+        <div class="txt"><div class="value">30 SEPTEMBER 2026</div><div class="label">Date</div></div>
+      </div>
+      <div class="stat">
+        <div class="ico">📍</div>
+        <div class="txt"><div class="value">SAINT JOSEPH UNIVERSITY</div><div class="label">Venue</div></div>
+      </div>
+      <div class="stat">
+        <div class="ico">🌐</div>
+        <div class="txt"><div class="value">ARABIC + INTERNATIONAL</div><div class="label">Editions</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue"></div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center;display:flex;">ONE LANGUAGE. MANY VOICES. ONE FUTURE.</div>
+    <h2 class="display">Translation is no longer only about<br>moving words from one language to another.</h2>
+    <p>It is about preserving meaning, culture, trust and the human voice in an increasingly intelligent world. This year's edition brings together academics, professionals and students to ask what translation becomes when artificial intelligence enters the room — and where the human translator remains irreplaceable.</p>
+    <div class="presenter">APEX GROUP INTERNATIONAL × SAINT JOSEPH UNIVERSITY</div>
+  </div>
+</section>
+
+<!-- TWO EVENTS -->
+<section class="two-events" id="events">
+  <div class="wrap">
+    <div class="eyebrow">TWO EVENTS. ONE CONVERSATION.</div>
+    <h2 class="display">Choose your edition</h2>
+    <div class="events-grid">
+      <div class="event-card">
+        <div class="tagnum">EVENT 01 — ARABIC EDITION</div>
+        <h3>Arabic Language & Translation</h3>
+        <div class="presented">Presented with Saint Joseph University</div>
+        <p class="desc">A full day exploring the place of Arabic translation in an AI-driven industry, with academics and practitioners shaping the conversation.</p>
+        <ul>
+          <li>Dr. Muhammad Amer</li>
+          <li>Ms. Christina Yepremian</li>
+          <li>Dr. Mary Yazbeck</li>
+          <li>Ms. Nancy Tahir</li>
+        </ul>
+        <a href="#speakers" class="btn">Explore Arabic Edition</a>
+      </div>
+      <div class="event-card pending">
+        <div class="tagnum">EVENT 02 — INTERNATIONAL EDITION</div>
+        <h3>English / International Edition</h3>
+        <div class="presented">Speakers to be announced</div>
+        <p class="desc">International perspectives on translation, technology, AI and the future of language. Details will be published as they're confirmed.</p>
+        <ul>
+          <li>Date — to be announced</li>
+          <li>Format — to be announced</li>
+        </ul>
+        <a href="#register" class="btn ghost">Get Notified</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPEAKERS -->
+<section class="speakers" id="speakers">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow" style="justify-content:center;display:flex;">ARABIC EDITION</div>
+      <h2 class="display">Speakers</h2>
+    </div>
+    <div class="speakers-grid">
+
+      <div class="spk-card">
+        <div class="photo">
+          <div class="num">01</div>
+          <div class="meet-tag">SPEAKER</div>
+          <svg viewBox="0 0 100 100" fill="#F4F1EC"><circle cx="50" cy="36" r="18"/><path d="M15 92c0-22 15-38 35-38s35 16 35 38"/></svg>
+          <div class="name-overlay">Dr. Muhammad<br>Amer</div>
+        </div>
+        <div class="body">
+          <div class="role">Arabic Language & Translation</div>
+          <div class="bio">Explores how Arabic language and translation practice adapt and hold their ground in the age of AI.</div>
+        </div>
+      </div>
+
+      <div class="spk-card">
+        <div class="photo">
+          <div class="num">02</div>
+          <div class="meet-tag">SPEAKER</div>
+          <svg viewBox="0 0 100 100" fill="#F4F1EC"><circle cx="50" cy="36" r="18"/><path d="M15 92c0-22 15-38 35-38s35 16 35 38"/></svg>
+          <div class="name-overlay">Christina<br>Yepremian</div>
+        </div>
+        <div class="body">
+          <div class="role">Senior Academic Coordinator, USJ Dubai</div>
+          <div class="bio">PhD candidate in Translation Studies; holds two Master's degrees from Saint Joseph University and York University, Toronto.</div>
+        </div>
+      </div>
+
+      <div class="spk-card">
+        <div class="photo">
+          <div class="num">03</div>
+          <div class="meet-tag">SPEAKER</div>
+          <svg viewBox="0 0 100 100" fill="#F4F1EC"><circle cx="50" cy="36" r="18"/><path d="M15 92c0-22 15-38 35-38s35 16 35 38"/></svg>
+          <div class="name-overlay">Dr. Mary<br>Yazbeck</div>
+        </div>
+        <div class="body">
+          <div class="role">Director — ETIB, Saint Joseph University</div>
+          <div class="bio">Leads the École de Traducteurs et d'Interprètes de Beyrouth. Focuses on translation as a creative act and the human role facing AI.</div>
+        </div>
+      </div>
+
+      <div class="spk-card">
+        <div class="photo">
+          <div class="num">04</div>
+          <div class="meet-tag">SPEAKER</div>
+          <svg viewBox="0 0 100 100" fill="#F4F1EC"><circle cx="50" cy="36" r="18"/><path d="M15 92c0-22 15-38 35-38s35 16 35 38"/></svg>
+          <div class="name-overlay">Nancy<br>Tahir</div>
+        </div>
+        <div class="body">
+          <div class="role">Translation Industry</div>
+          <div class="bio">Brings an industry perspective on translation practice, training, and where technology and human expertise intersect.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AGENDA -->
+<section class="agenda" id="agenda">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow" style="justify-content:center;display:flex;">30 SEPTEMBER 2026</div>
+      <h2 class="display">Event Agenda</h2>
+    </div>
+    <div class="subhint">Drag, scroll or use the arrows to move through the day →</div>
+  </div>
+
+  <div class="wrap">
+    <div class="agenda-scroll-outer">
+      <div class="agenda-scroll" id="agendaScroll">
+        <div class="agenda-card"><div class="time">09:30</div><h4>Registration & Coffee</h4><div class="who">Networking</div></div>
+        <div class="agenda-card"><div class="time">10:00</div><h4>Opening Ceremony</h4><div class="who">Apex Group International × Saint Joseph University</div></div>
+        <div class="agenda-card highlight"><div class="tag">KEYNOTE</div><div class="time">10:15</div><h4>The Future of Translation Begins With the Human</h4><div class="who">Opening Keynote</div></div>
+        <div class="agenda-card"><div class="time">10:45</div><h4>Arabic in the Age of AI</h4><div class="who">Dr. Muhammad Amer</div></div>
+        <div class="agenda-card"><div class="time">11:20</div><h4>Coffee Break</h4><div class="who">Networking</div></div>
+        <div class="agenda-card"><div class="time">11:40</div><h4>Translation as a Creative Act</h4><div class="who">Dr. Mary Yazbeck</div></div>
+        <div class="agenda-card"><div class="time">12:15</div><h4>Training Translators for a Changing Industry</h4><div class="who">Ms. Christina Yepremian</div></div>
+        <div class="agenda-card highlight"><div class="tag">PANEL</div><div class="time">12:50</div><h4>Human + AI: Who Shapes the Future?</h4><div class="who">Amer × Yepremian × Yazbeck × Tahir</div></div>
+        <div class="agenda-card"><div class="time">13:30</div><h4>Translate It. Challenge It. Defend It.</h4><div class="who">Live human vs. AI translation session</div></div>
+        <div class="agenda-card"><div class="time">14:00</div><h4>Networking & Closing</h4><div class="who">Certificates · Group Photo</div></div>
+      </div>
+    </div>
+    <div class="agenda-rail"><div class="agenda-rail-fill" id="agendaRailFill"></div></div>
+    <div class="agenda-nav">
+      <button class="agenda-arrow" id="agendaPrev" aria-label="Previous">‹</button>
+      <button class="agenda-arrow" id="agendaNext" aria-label="Next">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- CAN AI TRANSLATE -->
+<section class="bigq" id="bigq">
+  <div class="bigq-sticky">
+    <div class="wrap">
+      <h2 class="display">CAN AI TRANSLATE?</h2>
+      <div class="checklist" id="checklist">
+        <div class="check-row"><span>Words</span><span class="mark yes">✓</span></div>
+        <div class="check-row"><span>Meaning</span><span class="mark q">?</span></div>
+        <div class="check-row"><span>Culture</span><span class="mark q">?</span></div>
+        <div class="check-row"><span>Emotion</span><span class="mark q">?</span></div>
+        <div class="check-row"><span>Responsibility</span><span class="mark q">?</span></div>
+        <div class="check-row"><span>Trust</span><span class="mark q">?</span></div>
+      </div>
+      <div class="final" id="finalLine">That's where humans matter.</div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE -->
+<section class="interactive">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow" style="justify-content:center;display:flex;">TRY IT YOURSELF</div>
+      <h2 class="display">Try the Translator</h2>
+    </div>
+    <div class="subhint">Type a sentence and see it rendered three ways — word for word, by AI, and by a human translator. Notice what changes.</div>
+    <div class="demo">
+      <div class="demo-input-row">
+        <input id="demoInput" type="text" placeholder="Type a sentence in English or Arabic…" value="Time heals all wounds.">
+        <button class="btn" onclick="runDemo()">Compare</button>
+      </div>
+      <div class="cols">
+        <div class="col literal"><div class="lbl">📖 Literal</div><p id="litOut">الوقت يشفي كل الجروح.</p></div>
+        <div class="arrow">→</div>
+        <div class="col ai"><div class="lbl">🤖 AI Interpretation</div><p id="aiOut">Time is a healer for every wound.</p></div>
+        <div class="arrow">→</div>
+        <div class="col human"><div class="lbl">🧑‍💼 Human Perspective</div><p id="humOut">مع الوقت، بتهون كل جروحنا — لكن بتفضل جزء مننا.</p></div>
+      </div>
+      <div class="question">What would you choose?</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY ATTEND -->
+<section class="why">
+  <div class="wrap">
+    <div class="head"><h2 class="display">Why Attend</h2></div>
+    <div class="why-grid">
+      <div class="why-card"><div class="icon">🎓</div><h4>Learn</h4><p>Learn from leading academics and professionals in translation and AI.</p></div>
+      <div class="why-card"><div class="icon">🤖</div><h4>Explore AI</h4><p>Understand where AI helps — and where humans remain essential.</p></div>
+      <div class="why-card"><div class="icon">🌍</div><h4>Connect</h4><p>Meet translators, interpreters, students and industry professionals.</p></div>
+      <div class="why-card"><div class="icon">🏆</div><h4>Grow</h4><p>Build knowledge, connections and professional opportunities.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners">
+  <div class="wrap">
+    <div class="eyebrow">ORGANIZED WITH</div>
+    <div class="partner-marquee">
+      <div class="partner-track">
+        <div class="partner-slot logo-slot"><img src="data:image/png;base64,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" alt="Apex"></div>
+        <div class="partner-slot">USJ</div>
+        <div class="partner-slot pending">CIOL — pending confirmation</div>
+        <div class="partner-slot logo-slot"><img src="data:image/png;base64,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" alt="Apex"></div>
+        <div class="partner-slot">USJ</div>
+        <div class="partner-slot pending">CIOL — pending confirmation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATE -->
+<section class="cert">
+  <div class="wrap">
+    <h2 class="display">Learn. Connect. Earn.</h2>
+    <p>Participants completing the event will receive an official certificate of participation.</p>
+    <div class="cpd">CPD CERTIFICATION — SUBJECT TO CONFIRMATION</div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="head"><h2 class="display">Frequently Asked Questions</h2></div>
+  <details class="faq-item"><summary>Who can attend?</summary><div class="a">The event is open to translators, interpreters, students, academics and anyone interested in the future of language and translation.</div></details>
+  <details class="faq-item"><summary>Is the event online or onsite?</summary><div class="a">The Arabic Edition takes place onsite at Saint Joseph University. Details for the International Edition will be announced separately.</div></details>
+  <details class="faq-item"><summary>Is registration free?</summary><div class="a">Registration details, including any fees, will be confirmed on the registration page.</div></details>
+  <details class="faq-item"><summary>Will there be a certificate?</summary><div class="a">Yes, all participants completing the event will receive an official certificate of participation.</div></details>
+  <details class="faq-item"><summary>Will the sessions be in Arabic or English?</summary><div class="a">The Arabic Edition is conducted primarily in Arabic. The International Edition will be conducted in English.</div></details>
+  <details class="faq-item"><summary>Who is organizing the event?</summary><div class="a">The event is organized by Apex Group International in partnership with Saint Joseph University.</div></details>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="register">
+  <div class="band"></div>
+  <div class="wrap">
+    <h2 class="display">YOUR LANGUAGE.<br>YOUR VOICE.<br>YOUR FUTURE.</h2>
+    <div class="sub">Join the conversation — 30 September 2026, Saint Joseph University</div>
+    <a href="#" class="btn magnetic">Register Now</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-brand">
+      <img src="data:image/png;base64,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" alt="Apex">
+      <div class="fl">© 2026 Apex Group International × Saint Joseph University</div>
+    </div>
+    <div class="fl">www.apexlegaltranslation.com</div>
+  </div>
+</footer>
+
+<script>
+  /* scroll progress bar */
+  const progressBar = document.getElementById('progressBar');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  }
+
+  /* language-cycling chip */
+  const words = ["Hello","مرحبا","Bonjour","Hola","Ciao"];
+  let wi = 0;
+  const langEl = document.getElementById('langWord');
+  setInterval(()=>{
+    langEl.style.opacity = 0;
+    setTimeout(()=>{
+      wi = (wi+1) % words.length;
+      langEl.textContent = words[wi];
+      langEl.style.opacity = 1;
+    }, 300);
+  }, 1900);
+
+  /* magnetic buttons */
+  document.querySelectorAll('.magnetic').forEach(btn=>{
+    btn.addEventListener('mousemove', e=>{
+      const r = btn.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width/2;
+      const y = e.clientY - r.top - r.height/2;
+      btn.style.transform = `translate(${x*0.25}px, ${y*0.35}px)`;
+    });
+    btn.addEventListener('mouseleave', ()=>{ btn.style.transform = 'translate(0,0)'; });
+  });
+
+  /* agenda horizontal scroller */
+  const agendaScroll = document.getElementById('agendaScroll');
+  const agendaRailFill = document.getElementById('agendaRailFill');
+  function updateAgendaRail(){
+    const max = agendaScroll.scrollWidth - agendaScroll.clientWidth;
+    const pct = max > 0 ? (agendaScroll.scrollLeft / max) * 100 : 0;
+    agendaRailFill.style.width = pct + '%';
+  }
+  agendaScroll.addEventListener('scroll', updateAgendaRail, { passive:true });
+  document.getElementById('agendaPrev').addEventListener('click', ()=> agendaScroll.scrollBy({ left:-280, behavior:'smooth' }));
+  document.getElementById('agendaNext').addEventListener('click', ()=> agendaScroll.scrollBy({ left:280, behavior:'smooth' }));
+  updateAgendaRail();
+
+  /* drag-to-scroll for agenda */
+  let isDown = false, startX, scrollLeftStart;
+  agendaScroll.addEventListener('mousedown', e=>{
+    isDown = true; startX = e.pageX; scrollLeftStart = agendaScroll.scrollLeft;
+  });
+  window.addEventListener('mouseup', ()=> isDown = false);
+  window.addEventListener('mousemove', e=>{
+    if(!isDown) return;
+    agendaScroll.scrollLeft = scrollLeftStart - (e.pageX - startX);
+  });
+
+  /* CAN AI TRANSLATE sticky reveal */
+  const bigq = document.getElementById('bigq');
+  const rows = document.querySelectorAll('.check-row');
+  const finalLine = document.getElementById('finalLine');
+  function updateBigq(){
+    const rect = bigq.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const sectionHeight = bigq.offsetHeight;
+    const scrolledInto = -rect.top;
+    const scrollable = sectionHeight - vh;
+    let progress = scrollable > 0 ? scrolledInto/scrollable : 0;
+    progress = Math.max(0, Math.min(1, progress));
+    const revealCount = Math.floor(progress * (rows.length + 1));
+    rows.forEach((row,i)=> row.classList.toggle('active', i < revealCount));
+    finalLine.classList.toggle('active', revealCount > rows.length);
+  }
+
+  function onScroll(){
+    updateProgress();
+    updateBigq();
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* interactive translator demo */
+  const litMap = {
+    "Time heals all wounds.": ["الوقت يشفي كل الجروح.", "Time is a healer for every wound.", "مع الوقت، بتهون كل جروحنا — لكن بتفضل جزء مننا."]
+  };
+  function runDemo(){
+    const v = document.getElementById('demoInput').value.trim();
+    const preset = litMap[v];
+    if(preset){
+      document.getElementById('litOut').textContent = preset[0];
+      document.getElementById('aiOut').textContent = preset[1];
+      document.getElementById('humOut').textContent = preset[2];
+    } else {
+      document.getElementById('litOut').textContent = v + " (word-for-word rendering)";
+      document.getElementById('aiOut').textContent = v + " (fluent, context-aware rendering)";
+      document.getElementById('humOut').textContent = v + " (rendering shaped by culture, tone and intent)";
+    }
+  }
+</script>
+
+</body>
+</html>
